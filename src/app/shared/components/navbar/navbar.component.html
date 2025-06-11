@@ -1,0 +1,175 @@
+<!-- Sidebar Navigation Premium -->
+<nav class="navbar-container">
+
+  <!-- Efecto de gradiente de fondo -->
+  <div class="navbar-gradient-bg"></div>
+
+  <!-- Contenido del navbar -->
+  <div class="navbar-content">
+
+    <!-- Header del sidebar premium -->
+    <div class="navbar-header">
+      <div class="brand-section">
+
+        <!-- Logo con efecto prisma -->
+        <div class="brand-logo">
+          <div class="logo-prisma">
+            <div class="prisma-face face-1"></div>
+            <div class="prisma-face face-2"></div>
+            <div class="prisma-face face-3"></div>
+          </div>
+          <svg class="brand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z">
+            </path>
+          </svg>
+        </div>
+
+        <!-- Texto del brand premium -->
+        <div class="brand-info">
+          <h2 class="brand-title">
+            <span class="title-gradient">IoT Control</span>
+          </h2>
+          <div class="brand-subtitle">
+            <span class="system-badge">Sistema MQTT</span>
+            <div class="version-chip">MMI-711</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Separador con efecto neón -->
+    <div class="neon-divider">
+      <div class="divider-line"></div>
+      <div class="divider-glow"></div>
+    </div>
+
+    <!-- Menú de navegación premium -->
+    <div class="navigation-menu">
+      <div class="menu-label">Navegación Principal</div>
+
+      <ul class="menu-list">
+        <li class="menu-item" *ngFor="let item of navItems; let i = index">
+          <a
+            [routerLink]="item.route"
+            class="menu-link"
+            [class.active]="isActiveRoute(item.route)"
+            [title]="item.description"
+            [style.animation-delay.ms]="i * 100">
+
+            <!-- Indicador activo lateral -->
+            <div class="active-bar" *ngIf="isActiveRoute(item.route)"></div>
+
+            <!-- Contenedor del icono con efectos -->
+            <div class="icon-container">
+              <div class="icon-bg"></div>
+              <div class="icon-glow"></div>
+              <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <g [innerHTML]="getIconSvg(item.icon)"></g>
+              </svg>
+            </div>
+
+            <!-- Contenido del texto -->
+            <div class="link-content">
+              <div class="link-main">
+                <span class="link-label">{{ item.label }}</span>
+                <div class="link-indicator" *ngIf="isActiveRoute(item.route)">
+                  <div class="indicator-dot"></div>
+                </div>
+              </div>
+              <span class="link-description">{{ item.description }}</span>
+            </div>
+
+            <!-- Efecto hover -->
+            <div class="hover-effect"></div>
+
+            <!-- Partículas decorativas -->
+            <div class="particles" *ngIf="isActiveRoute(item.route)">
+              <span class="particle particle-1"></span>
+              <span class="particle particle-2"></span>
+              <span class="particle particle-3"></span>
+            </div>
+
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Espaciador flexible -->
+    <div class="menu-spacer"></div>
+
+    <!-- Widget de estado de conexión -->
+    <div class="connection-widget">
+      <div class="widget-header">
+        <div class="widget-icon">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0">
+            </path>
+          </svg>
+        </div>
+        <span class="widget-title">Estado del Sistema</span>
+      </div>
+
+      <div class="connection-status-widget">
+        <div class="status-orb-mini">
+          <div class="orb-core"></div>
+          <div class="orb-ring"></div>
+        </div>
+        <div class="status-text-widget">
+          <div class="status-primary">MQTT Conectado</div>
+          <div class="status-secondary">Operativo • 99.9%</div>
+        </div>
+      </div>
+
+      <div class="metrics-mini">
+        <div class="metric">
+          <span class="metric-value">24ms</span>
+          <span class="metric-label">Latencia</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">127</span>
+          <span class="metric-label">Mensajes</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer premium -->
+    <div class="navbar-footer">
+
+      <!-- Información del sistema -->
+      <div class="system-info">
+        <div class="info-row">
+          <span class="info-label">Versión</span>
+          <span class="info-value">1.0.0</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Build</span>
+          <span class="info-value">#2025.1</span>
+        </div>
+      </div>
+
+      <!-- Botones de acción rápida -->
+      <div class="quick-actions">
+        <button class="action-btn" title="Ayuda y documentación">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </button>
+
+        <button class="action-btn" title="Configuración avanzada">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100-4m0 4v2m0-6V4"></path>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Línea de borde lateral con gradiente -->
+  <div class="sidebar-border"></div>
+
+</nav>

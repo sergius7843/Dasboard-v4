@@ -1,0 +1,299 @@
+/* Container principal del footer */
+.footer-container {
+  position: relative;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-primary);
+  padding: var(--space-lg) 0;
+  transition: var(--transition-opacity);
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.footer-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Línea decorativa superior */
+.footer-border {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-500), transparent);
+}
+
+/* Contenido principal */
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+
+/* Sección izquierda - Información de la app */
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+
+.app-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.app-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.app-details {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.version {
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-medium);
+  color: var(--primary-400);
+}
+
+.separator {
+  color: var(--text-tertiary);
+}
+
+.build-year {
+  color: var(--text-secondary);
+}
+
+/* Sección central - Links */
+.footer-center {
+  display: flex;
+  align-items: center;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.footer-link {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-colors);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+}
+
+.footer-link:hover {
+  color: var(--primary-400);
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.link-separator {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+/* Sección derecha - Copyright y tecnologías */
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+}
+
+.copyright {
+  display: flex;
+  align-items: center;
+}
+
+.copyright-text {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.tech-stack {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.tech-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  font-weight: var(--font-weight-medium);
+}
+
+.tech-icons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.tech-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--text-tertiary);
+  transition: var(--transition-colors);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+}
+
+.tech-icon:hover {
+  color: var(--primary-400);
+  background-color: rgba(59, 130, 246, 0.1);
+  transform: scale(1.1);
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .footer-content {
+    padding: 0 var(--space-md);
+    gap: var(--space-lg);
+  }
+
+  .footer-center {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .footer-right {
+    align-items: center;
+  }
+
+  .app-info {
+    align-items: center;
+  }
+
+  .tech-stack {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-content {
+    padding: 0 var(--space-sm);
+    gap: var(--space-md);
+  }
+
+  .app-brand {
+    justify-content: center;
+  }
+
+  .tech-icons {
+    justify-content: center;
+  }
+
+  .footer-container {
+    padding: var(--space-md) 0;
+  }
+}
+
+/* Animaciones adicionales */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-container.visible {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.footer-container.visible .app-info {
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+
+.footer-container.visible .footer-center {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.footer-container.visible .footer-right {
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+/* Estados especiales */
+.footer-link:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-500);
+}
+
+.tech-icon:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-500);
+}
+
+/* Efecto de glassmorphism sutil */
+.footer-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+  rgba(30, 41, 59, 0.9),
+  rgba(51, 65, 85, 0.8)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
+/* Mejora visual para el footer border */
+.footer-border::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -10px;
+  right: -10px;
+  height: 4px;
+  background: linear-gradient(90deg,
+  transparent,
+  rgba(59, 130, 246, 0.3),
+  var(--primary-500),
+  rgba(59, 130, 246, 0.3),
+  transparent
+  );
+  border-radius: 2px;
+  filter: blur(2px);
+}

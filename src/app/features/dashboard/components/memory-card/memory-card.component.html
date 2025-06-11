@@ -1,0 +1,157 @@
+<!-- Memory Card Premium -->
+<div class="memory-card" [class.offline]="!isConnected" [class.stale]="!isDataFresh()">
+
+  <!-- Gradiente de fondo animado -->
+  <div class="card-gradient"></div>
+
+  <!-- Header de la card -->
+  <div class="card-header">
+    <div class="header-left">
+      <div class="icon-container">
+        <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z">
+          </path>
+        </svg>
+      </div>
+      <div class="header-info">
+        <h3 class="card-title">Memoria del Sistema</h3>
+        <p class="card-subtitle">ESP32 • Uso en tiempo real</p>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="status-indicator"
+           [class.connected]="isConnected && isDataFresh()"
+           [class.warning]="isConnected && !isDataFresh()"
+           [class.disconnected]="!isConnected">
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="card-content" *ngIf="memoryData; else noDataTemplate">
+
+    <!-- Memoria Heap (RAM) -->
+    <div class="memory-section">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="memory-type">RAM (Heap)</span>
+          <span class="memory-percentage"
+                [class]="'text-' + getUsageColor(getHeapUsagePercentage())">
+            {{ getHeapUsagePercentage() }}%
+          </span>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill heap-fill"
+               [style.width.%]="getHeapUsagePercentage()"
+               [class]="getUsageColor(getHeapUsagePercentage())">
+          </div>
+        </div>
+        <div class="progress-labels">
+          <span class="used-label">{{ formatBytes(memoryData.memory.heap.used) }}</span>
+          <span class="total-label">{{ formatBytes(memoryData.memory.heap.total) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Memoria Flash -->
+    <div class="memory-section">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="memory-type">Flash Storage</span>
+          <span class="memory-percentage"
+                [class]="'text-' + getUsageColor(getFlashUsagePercentage())">
+            {{ getFlashUsagePercentage() }}%
+          </span>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill flash-fill"
+               [style.width.%]="getFlashUsagePercentage()"
+               [class]="getUsageColor(getFlashUsagePercentage())">
+          </div>
+        </div>
+        <div class="progress-labels">
+          <span class="used-label">{{ formatBytes(memoryData.memory.flash.used) }}</span>
+          <span class="total-label">{{ formatBytes(memoryData.memory.flash.total) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="additional-info">
+      <div class="info-grid">
+
+        <!-- Uptime -->
+        <div class="info-item">
+          <div class="info-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12,6 12,12 16,14"></polyline>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-value">{{ formatUptime(memoryData.memory.uptime_ms) }}</span>
+            <span class="info-label">Uptime</span>
+          </div>
+        </div>
+
+        <!-- Memoria libre -->
+        <div class="info-item">
+          <div class="info-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+              </path>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-value">{{ formatBytes(memoryData.memory.heap.free) }}</span>
+            <span class="info-label">RAM Libre</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Template cuando no hay datos -->
+  <ng-template #noDataTemplate>
+    <div class="no-data-state">
+      <div class="no-data-icon">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.034 0-3.9.785-5.291 2.09m6.291-4.09L16 10.5M8 4.5v3.293a1 1 0 01-.293.707L6 10.207V15a2 2 0 002 2h8a2 2 0 002-2v-4.793L16.293 8.5A1 1 0 0116 7.793V4.5">
+          </path>
+        </svg>
+      </div>
+      <div class="no-data-text">
+        <h4>Sin datos de memoria</h4>
+        <p *ngIf="!isConnected">Conecta al broker MQTT para ver los datos</p>
+        <p *ngIf="isConnected">Esperando datos del ESP32...</p>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Footer con timestamp -->
+  <div class="card-footer" *ngIf="lastUpdate">
+    <div class="footer-content">
+      <span class="last-update">
+        Última actualización: {{ lastUpdate | date:'HH:mm:ss' }}
+      </span>
+      <div class="data-freshness"
+           [class.fresh]="isDataFresh()"
+           [class.stale]="!isDataFresh()">
+        {{ isDataFresh() ? 'En línea' : 'Desactualizado' }}
+      </div>
+    </div>
+  </div>
+
+</div>

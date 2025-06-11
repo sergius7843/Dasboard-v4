@@ -1,0 +1,225 @@
+<!-- Layout principal del control -->
+<div class="min-h-screen bg-dark-900 flex">
+
+  <!-- Sidebar / Navbar lateral -->
+  <aside class="w-64 bg-dark-800 border-r border-dark-700">
+    <app-navbar></app-navbar>
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-dark-800 border-b border-dark-700 h-16">
+      <app-header></app-header>
+    </header>
+
+    <!-- Área de contenido principal -->
+    <main class="flex-1 p-6 bg-dark-900">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- Título de la página -->
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-dark-50 mb-2">
+            Control de LEDs RGB
+          </h1>
+          <p class="text-dark-400">
+            Controla los 3 grupos de LEDs RGB del ESP32 en tiempo real
+          </p>
+        </div>
+
+        <!-- Estado de conexión -->
+        <div class="mb-6">
+          <div class="connection-status" [class.connected]="isConnected" [class.disconnected]="!isConnected">
+            <div class="status-indicator">
+              <div class="status-dot"></div>
+            </div>
+            <div class="status-text">
+              <span class="status-title">{{ isConnected ? 'ESP32 Conectado' : 'ESP32 Desconectado' }}</span>
+              <span class="status-subtitle">{{ isConnected ? 'Listo para controlar LEDs' : 'Conecta al broker MQTT' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controles globales -->
+        <div class="global-controls mb-8">
+          <h2 class="text-xl font-semibold text-dark-50 mb-4">Controles Globales</h2>
+          <div class="control-buttons">
+            <button
+              (click)="turnOffAllLeds()"
+              [disabled]="!isConnected"
+              class="control-btn danger">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+              </svg>
+              Apagar Todo
+            </button>
+
+            <button
+              (click)="setAllLedsColor({r: 255, g: 255, b: 255})"
+              [disabled]="!isConnected"
+              class="control-btn primary">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+              Encender Todo (Blanco)
+            </button>
+          </div>
+        </div>
+
+        <!-- Colores predefinidos -->
+        <div class="preset-colors mb-8">
+          <h2 class="text-xl font-semibold text-dark-50 mb-4">Colores Predefinidos</h2>
+          <div class="preset-grid">
+            <button
+              *ngFor="let color of presetColors"
+              (click)="setAllLedsColor(color)"
+              [disabled]="!isConnected"
+              class="preset-color"
+              [style.background-color]="getColorStyle(color)"
+              [title]="'RGB(' + color.r + ',' + color.g + ',' + color.b + ')'">
+            </button>
+          </div>
+        </div>
+
+        <!-- Control individual de LEDs -->
+        <div class="led-groups">
+          <h2 class="text-xl font-semibold text-dark-50 mb-6">Control Individual</h2>
+
+          <div class="groups-grid">
+            <div *ngFor="let group of ledGroups" class="led-group-card">
+
+              <!-- Header del grupo -->
+              <div class="group-header">
+                <div class="group-info">
+                  <h3 class="group-title">{{ group.name }}</h3>
+                  <div class="group-status" [class.on]="group.isOn" [class.off]="!group.isOn">
+                    {{ group.isOn ? 'Encendido' : 'Apagado' }}
+                  </div>
+                </div>
+                <div class="group-controls">
+                  <button
+                    (click)="turnOnLed(group.id)"
+                    [disabled]="!isConnected"
+                    class="mini-btn success"
+                    title="Encender">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                  </button>
+                  <button
+                    (click)="turnOffLed(group.id)"
+                    [disabled]="!isConnected"
+                    class="mini-btn danger"
+                    title="Apagar">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Preview del color actual -->
+              <div class="color-preview">
+                <div
+                  class="color-circle"
+                  [style.background-color]="getColorStyle(group.color)">
+                </div>
+                <div class="color-info">
+                  <span class="color-hex">{{ getColorHex(group.color) }}</span>
+                  <span class="color-rgb">RGB({{ group.color.r }}, {{ group.color.g }}, {{ group.color.b }})</span>
+                </div>
+              </div>
+
+              <!-- Selector de color -->
+              <div class="color-picker">
+                <label class="picker-label">Selector de Color</label>
+                <input
+                  type="color"
+                  [value]="getColorHex(group.color)"
+                  (change)="onColorChange(group.id, $event)"
+                  [disabled]="!isConnected"
+                  class="color-input">
+              </div>
+
+              <!-- Sliders RGB -->
+              <div class="rgb-sliders">
+
+                <!-- Slider Rojo -->
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span class="label-text">Rojo</span>
+                    <span class="label-value">{{ group.color.r }}</span>
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="255"
+                    [value]="group.color.r"
+                    (input)="onSliderChange(group.id, 'r', +$any($event.target).value)"
+                    [disabled]="!isConnected"
+                    class="slider red">
+                </div>
+
+                <!-- Slider Verde -->
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span class="label-text">Verde</span>
+                    <span class="label-value">{{ group.color.g }}</span>
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="255"
+                    [value]="group.color.g"
+                    (input)="onSliderChange(group.id, 'g', +$any($event.target).value)"
+                    [disabled]="!isConnected"
+                    class="slider green">
+                </div>
+
+                <!-- Slider Azul -->
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span class="label-text">Azul</span>
+                    <span class="label-value">{{ group.color.b }}</span>
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="255"
+                    [value]="group.color.b"
+                    (input)="onSliderChange(group.id, 'b', +$any($event.target).value)"
+                    [disabled]="!isConnected"
+                    class="slider blue">
+                </div>
+
+              </div>
+
+              <!-- Colores rápidos para este grupo -->
+              <div class="quick-colors">
+                <label class="quick-label">Colores Rápidos</label>
+                <div class="quick-grid">
+                  <button
+                    *ngFor="let color of presetColors.slice(0, 6)"
+                    (click)="applyPresetColor(group.id, color)"
+                    [disabled]="!isConnected"
+                    class="quick-color"
+                    [style.background-color]="getColorStyle(color)">
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </main>
+
+    <!-- Footer (solo visible al final del scroll) -->
+    <app-footer></app-footer>
+
+  </div>
+
+</div>

@@ -1,0 +1,150 @@
+<!-- Header profesional con diseño impresionante -->
+<div class="header-container">
+
+  <!-- Efecto de gradiente animado de fondo -->
+  <div class="header-gradient-bg"></div>
+
+  <!-- Contenido principal del header -->
+  <div class="header-content">
+
+    <!-- Sección izquierda - Branding premium -->
+    <div class="header-left">
+      <div class="brand-container">
+        <!-- Logo con efecto holográfico -->
+        <div class="logo-wrapper">
+          <div class="logo-glow"></div>
+          <div class="logo-icon">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z">
+              </path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Texto del brand con tipografía premium -->
+        <div class="brand-text">
+          <h1 class="brand-title">
+            <span class="text-gradient-premium">MQTT</span>
+            <span class="text-white"> Dashboard</span>
+          </h1>
+          <div class="brand-subtitle">
+            <span class="version-badge">v1.0</span>
+            <span class="separator">•</span>
+            <span class="system-label">IoT Control System</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección central - Estado de conexión premium -->
+    <div class="header-center">
+      <div class="connection-hub" *ngIf="connectionStatus$ | async as status">
+
+        <!-- Indicador principal de estado -->
+        <div class="status-display">
+          <div class="status-orb-container">
+            <div class="status-orb"
+                 [class.connected]="status.connected"
+                 [class.connecting]="status.reconnecting"
+                 [class.disconnected]="!status.connected && !status.reconnecting">
+              <div class="orb-inner"></div>
+              <div class="orb-pulse"></div>
+            </div>
+          </div>
+
+          <div class="status-info">
+            <div class="status-title">{{ getStatusTitle(status) }}</div>
+            <div class="status-subtitle">{{ getStatusSubtitle(status) }}</div>
+          </div>
+        </div>
+
+        <!-- Controles de conexión elegantes -->
+        <div class="connection-controls">
+          <button
+            *ngIf="!status.connected && !status.reconnecting"
+            (click)="onConnectMqtt()"
+            class="control-btn connect-btn">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span>Conectar</span>
+          </button>
+
+          <button
+            *ngIf="status.connected"
+            (click)="onDisconnectMqtt()"
+            class="control-btn disconnect-btn">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            <span>Desconectar</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sección derecha - Información del sistema -->
+    <div class="header-right">
+
+      <!-- Panel de información -->
+      <div class="info-panel">
+
+        <!-- Reloj premium -->
+        <div class="time-widget">
+          <div class="time-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12,6 12,12 16,14"></polyline>
+            </svg>
+          </div>
+          <div class="time-display">
+            <div class="time-value">{{ currentTime }}</div>
+            <div class="time-label">Hora Local</div>
+          </div>
+        </div>
+
+        <!-- Separador elegante -->
+        <div class="elegant-separator"></div>
+
+        <!-- Información del broker -->
+        <div class="broker-widget">
+          <div class="broker-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01">
+              </path>
+            </svg>
+          </div>
+          <div class="broker-info">
+            <div class="broker-address">localhost:9001</div>
+            <div class="broker-label">Broker MQTT</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Botón de configuración -->
+      <div class="settings-button">
+        <button class="settings-btn" title="Configuración del sistema">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+            </path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Línea de estado inferior -->
+  <div class="status-line"
+       [class.connected]="(connectionStatus$ | async)?.connected"
+       [class.connecting]="(connectionStatus$ | async)?.reconnecting">
+  </div>
+
+</div>

@@ -1,0 +1,173 @@
+<!-- Layout principal del dashboard -->
+<div class="min-h-screen bg-dark-900 flex">
+
+  <!-- Sidebar / Navbar lateral -->
+  <aside class="w-64 bg-dark-800 border-r border-dark-700">
+    <app-navbar></app-navbar>
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-dark-800 border-b border-dark-700 h-16">
+      <app-header></app-header>
+    </header>
+
+    <!-- Área de contenido principal -->
+    <main class="flex-1 p-6 bg-dark-900">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- Título de la página -->
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-dark-50 mb-2">
+            Dashboard MQTT
+          </h1>
+          <p class="text-dark-400">
+            Monitor y control de dispositivos IoT en tiempo real
+          </p>
+        </div>
+
+        <!-- Grid de cards con datos reales del ESP32 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+          <!-- Heartbeat Card del ESP32 (más importante) -->
+          <app-heartbeat-card></app-heartbeat-card>
+
+          <!-- Temperature Card del ESP32 -->
+          <app-temperature-card></app-temperature-card>
+
+          <!-- Memory Card del ESP32 -->
+          <app-memory-card></app-memory-card>
+
+          <!-- WiFi Card del ESP32 -->
+          <app-wifi-card></app-wifi-card>
+
+        </div>
+
+        <!-- Área donde irán los componentes futuros -->
+        <div class="mt-8 space-y-6">
+          <div class="card-base">
+            <h2 class="text-xl font-semibold text-dark-50 mb-4">
+              Área de Contenido Principal
+            </h2>
+            <p class="text-dark-400 mb-4">
+              Aquí se añadirán los componentes de envío y recepción de mensajes MQTT,
+              así como las cards personalizadas para mostrar datos de sensores.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-4 bg-dark-700 rounded-lg">
+                <h3 class="font-medium text-dark-50 mb-2">Envío de Mensajes</h3>
+                <p class="text-sm text-dark-400">Próximamente: Componente para enviar comandos MQTT</p>
+              </div>
+              <div class="p-4 bg-dark-700 rounded-lg">
+                <h3 class="font-medium text-dark-50 mb-2">Recepción de Mensajes</h3>
+                <p class="text-sm text-dark-400">Próximamente: Monitor de mensajes en tiempo real</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contenido adicional para generar scroll -->
+          <div class="card-base">
+            <h2 class="text-xl font-semibold text-dark-50 mb-4">
+              Métricas del Sistema
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="text-center p-4 bg-dark-700 rounded-lg">
+                <div class="text-2xl font-bold text-primary-400">99.9%</div>
+                <div class="text-sm text-dark-400">Uptime</div>
+              </div>
+              <div class="text-center p-4 bg-dark-700 rounded-lg">
+                <div class="text-2xl font-bold text-success-400">24ms</div>
+                <div class="text-sm text-dark-400">Latencia</div>
+              </div>
+              <div class="text-center p-4 bg-dark-700 rounded-lg">
+                <div class="text-2xl font-bold text-warning-400">15KB/s</div>
+                <div class="text-sm text-dark-400">Throughput</div>
+              </div>
+              <div class="text-center p-4 bg-dark-700 rounded-lg">
+                <div class="text-2xl font-bold text-primary-400">512</div>
+                <div class="text-sm text-dark-400">Mensajes/min</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-base">
+            <h2 class="text-xl font-semibold text-dark-50 mb-4">
+              Log de Actividades
+            </h2>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 p-3 bg-dark-700 rounded-lg">
+                <div class="w-2 h-2 bg-success-500 rounded-full"></div>
+                <span class="text-sm text-dark-300">12:34:56 - Dispositivo ESP32_001 conectado</span>
+              </div>
+              <div class="flex items-center gap-3 p-3 bg-dark-700 rounded-lg">
+                <div class="w-2 h-2 bg-primary-500 rounded-full"></div>
+                <span class="text-sm text-dark-300">12:33:21 - Mensaje recibido en topic/sensors/temperature</span>
+              </div>
+              <div class="flex items-center gap-3 p-3 bg-dark-700 rounded-lg">
+                <div class="w-2 h-2 bg-warning-500 rounded-full"></div>
+                <span class="text-sm text-dark-300">12:32:15 - Reconectando al broker MQTT...</span>
+              </div>
+              <div class="flex items-center gap-3 p-3 bg-dark-700 rounded-lg">
+                <div class="w-2 h-2 bg-success-500 rounded-full"></div>
+                <span class="text-sm text-dark-300">12:31:45 - Sistema iniciado correctamente</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Más contenido para asegurar scroll -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card-base">
+              <h3 class="text-lg font-semibold text-dark-50 mb-3">Configuración MQTT</h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-dark-400">Broker:</span>
+                  <span class="text-dark-200">localhost:9001</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-dark-400">Cliente ID:</span>
+                  <span class="text-dark-200 font-mono">angular-mqtt-a8b2c4</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-dark-400">Keep Alive:</span>
+                  <span class="text-dark-200">60s</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-dark-400">Clean Session:</span>
+                  <span class="text-success-400">True</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-base">
+              <h3 class="text-lg font-semibold text-dark-50 mb-3">Topics Suscritos</h3>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between p-2 bg-dark-700 rounded">
+                  <span class="text-sm font-mono text-dark-300">sensors/+/temperature</span>
+                  <span class="text-xs text-success-400">Activo</span>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-dark-700 rounded">
+                  <span class="text-sm font-mono text-dark-300">devices/+/status</span>
+                  <span class="text-xs text-success-400">Activo</span>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-dark-700 rounded">
+                  <span class="text-sm font-mono text-dark-300">system/alerts</span>
+                  <span class="text-xs text-warning-400">Pendiente</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Espaciado adicional para scroll -->
+          <div class="h-32"></div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Footer (solo visible al final del scroll) -->
+    <app-footer></app-footer>
+
+  </div>
+</div>

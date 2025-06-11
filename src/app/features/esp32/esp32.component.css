@@ -1,0 +1,318 @@
+/* Efecto de gradiente de fondo */
+.header-gradient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%);
+  pointer-events: none;
+  z-index: -1;
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* Tarjetas de estado superior */
+.connection-card {
+  @apply bg-dark-800 border border-dark-700 rounded-lg p-4 transition-all duration-300;
+}
+
+.connection-card.connected {
+  @apply border-success-500 bg-success-500/10;
+}
+
+.connection-card.disconnected {
+  @apply border-danger-500 bg-danger-500/10;
+}
+
+.status-indicator {
+  @apply flex items-center justify-center w-12 h-12 mr-4;
+}
+
+.status-dot {
+  @apply w-3 h-3 rounded-full;
+  animation: pulse 2s infinite;
+}
+
+.connection-card.connected .status-dot {
+  @apply bg-success-500;
+}
+
+.connection-card.disconnected .status-dot {
+  @apply bg-danger-500;
+}
+
+.status-info h3 {
+  @apply text-sm font-semibold text-dark-50;
+}
+
+.status-info p {
+  @apply text-xs text-dark-400;
+}
+
+.summary-card {
+  @apply bg-dark-800 border border-dark-700 rounded-lg p-4;
+}
+
+.summary-icon {
+  @apply flex items-center justify-center w-12 h-12 bg-primary-500/20 rounded-lg;
+}
+
+.master-control-card {
+  @apply bg-dark-800 border border-dark-700 rounded-lg p-4;
+}
+
+.master-toggle {
+  @apply flex items-center justify-center w-12 h-12 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.master-toggle.all-on {
+  @apply bg-success-500 text-white hover:bg-success-600;
+}
+
+.master-toggle.some-off {
+  @apply bg-primary-500 text-white hover:bg-primary-600;
+}
+
+/* Sección de escenarios */
+.scenarios-section {
+  @apply bg-dark-800/50 rounded-xl p-6 border border-dark-700;
+}
+
+.scenarios-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4;
+}
+
+.scenario-btn {
+  @apply flex items-center p-4 bg-dark-800 border border-dark-700 rounded-lg transition-all duration-300 hover:border-primary-500 hover:bg-primary-500/10 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.scenario-btn.presentation:hover {
+  @apply border-blue-500 bg-blue-500/10;
+}
+
+.scenario-btn.full:hover {
+  @apply border-yellow-500 bg-yellow-500/10;
+}
+
+.scenario-btn.break:hover {
+  @apply border-green-500 bg-green-500/10;
+}
+
+.scenario-btn.emergency:hover {
+  @apply border-red-500 bg-red-500/10;
+}
+
+.scenario-icon {
+  @apply flex items-center justify-center w-12 h-12 bg-primary-500/20 rounded-lg mr-4;
+}
+
+.scenario-info h3 {
+  @apply text-sm font-semibold text-dark-50;
+}
+
+.scenario-info p {
+  @apply text-xs text-dark-400;
+}
+
+/* Sección de zonas */
+.zones-section {
+  @apply bg-dark-800/50 rounded-xl p-6 border border-dark-700;
+}
+
+.zones-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6;
+}
+
+.zone-card {
+  @apply bg-dark-800 border border-dark-700 rounded-lg p-6 transition-all duration-300 hover:border-primary-500/50 hover:shadow-card-hover;
+}
+
+.zone-header {
+  @apply flex items-start mb-4;
+}
+
+.zone-icon-container {
+  @apply flex items-center justify-center w-12 h-12 bg-dark-700 rounded-lg mr-4 transition-all duration-300;
+}
+
+.zone-icon {
+  @apply w-6 h-6 text-dark-400 transition-all duration-300;
+}
+
+.zone-icon.active {
+  @apply text-primary-500;
+}
+
+.zone-card:hover .zone-icon-container {
+  @apply bg-primary-500/20;
+}
+
+.zone-card:hover .zone-icon {
+  @apply text-primary-500;
+}
+
+.zone-info h3 {
+  @apply text-lg font-semibold text-dark-50 mb-1;
+}
+
+.zone-info p {
+  @apply text-sm text-dark-400;
+}
+
+/* Estado de zona */
+.zone-status {
+  @apply mb-6;
+}
+
+.status-indicator-row {
+  @apply flex items-center mb-2;
+}
+
+.status-light {
+  @apply w-3 h-3 rounded-full mr-3 transition-all duration-300;
+}
+
+.status-light.on {
+  @apply bg-success-500;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.status-light.off {
+  @apply bg-dark-600;
+}
+
+.status-text {
+  @apply text-sm font-medium;
+}
+
+.last-update {
+  @apply text-xs text-dark-500;
+}
+
+/* Controles de zona */
+.zone-controls {
+  @apply grid grid-cols-3 gap-2;
+}
+
+.zone-btn {
+  @apply flex flex-col items-center justify-center p-3 rounded-lg text-xs font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.zone-btn.on {
+  @apply bg-success-500/20 text-success-500 border border-success-500/30 hover:bg-success-500/30;
+}
+
+.zone-btn.on.active {
+  @apply bg-success-500 text-white;
+}
+
+.zone-btn.off {
+  @apply bg-danger-500/20 text-danger-500 border border-danger-500/30 hover:bg-danger-500/30;
+}
+
+.zone-btn.off.active {
+  @apply bg-danger-500 text-white;
+}
+
+.zone-btn.toggle {
+  @apply bg-primary-500/20 text-primary-500 border border-primary-500/30 hover:bg-primary-500/30;
+}
+
+.zone-btn svg {
+  @apply mb-1;
+}
+
+/* Sección de emergencia */
+.emergency-section {
+  @apply bg-gradient-to-r from-danger-500/10 to-warning-500/10 rounded-xl p-6 border border-danger-500/30;
+}
+
+.emergency-card {
+  @apply bg-dark-800/80 rounded-lg p-6;
+}
+
+.emergency-header {
+  @apply flex items-center mb-6;
+}
+
+.emergency-icon {
+  @apply flex items-center justify-center w-12 h-12 bg-danger-500/20 rounded-lg mr-4;
+}
+
+.emergency-controls {
+  @apply flex flex-col sm:flex-row gap-4;
+}
+
+.emergency-btn {
+  @apply flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.emergency-btn.danger {
+  @apply bg-danger-500 text-white hover:bg-danger-600;
+}
+
+.emergency-btn.success {
+  @apply bg-success-500 text-white hover:bg-success-600;
+}
+
+.emergency-btn svg {
+  @apply mr-2;
+}
+
+/* Animaciones */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .zones-grid {
+    @apply grid-cols-1;
+  }
+  
+  .scenarios-grid {
+    @apply grid-cols-2;
+  }
+  
+  .zone-controls {
+    @apply grid-cols-1 gap-3;
+  }
+  
+  .zone-btn {
+    @apply flex-row p-4;
+  }
+  
+  .zone-btn svg {
+    @apply mr-2 mb-0;
+  }
+  
+  .emergency-controls {
+    @apply flex-col;
+  }
+}
+
+/* Estados de hover mejorados */
+.zone-card:hover {
+  @apply transform scale-105;
+}
+
+.scenario-btn:hover {
+  @apply transform scale-105;
+}
+
+.emergency-btn:hover {
+  @apply transform scale-105;
+}
+
+/* Efectos de focus para accesibilidad */
+.zone-btn:focus,
+.scenario-btn:focus,
+.emergency-btn:focus,
+.master-toggle:focus {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-dark-900;
+}

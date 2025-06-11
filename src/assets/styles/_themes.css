@@ -1,0 +1,157 @@
+/* Tema oscuro (principal) */
+.theme-dark {
+  --bg-primary: var(--dark-900);
+  --bg-secondary: var(--dark-800);
+  --bg-tertiary: var(--dark-700);
+  --bg-quaternary: var(--dark-600);
+  
+  --text-primary: var(--dark-50);
+  --text-secondary: var(--dark-400);
+  --text-tertiary: var(--dark-500);
+  --text-muted: var(--dark-600);
+  
+  --border-primary: var(--dark-700);
+  --border-secondary: var(--dark-600);
+}
+
+/* Tema claro (opcional para futuro) */
+.theme-light {
+  --bg-primary: var(--dark-50);
+  --bg-secondary: var(--dark-100);
+  --bg-tertiary: var(--dark-200);
+  --bg-quaternary: var(--dark-300);
+  
+  --text-primary: var(--dark-900);
+  --text-secondary: var(--dark-600);
+  --text-tertiary: var(--dark-500);
+  --text-muted: var(--dark-400);
+  
+  --border-primary: var(--dark-300);
+  --border-secondary: var(--dark-200);
+}
+
+/* Temas de acento */
+.accent-blue {
+  --accent-primary: var(--primary-500);
+  --accent-secondary: var(--primary-400);
+  --accent-tertiary: var(--primary-300);
+}
+
+.accent-emerald {
+  --accent-primary: var(--success-500);
+  --accent-secondary: var(--success-400);
+  --accent-tertiary: #6ee7b7;
+}
+
+.accent-amber {
+  --accent-primary: var(--warning-500);
+  --accent-secondary: var(--warning-400);
+  --accent-tertiary: #fcd34d;
+}
+
+.accent-rose {
+  --accent-primary: var(--danger-500);
+  --accent-secondary: var(--danger-400);
+  --accent-tertiary: #fda4af;
+}
+
+/* Estados de componentes */
+.state-loading {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: wait;
+}
+
+.state-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.state-error {
+  border-color: var(--danger-500);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.state-success {
+  border-color: var(--success-500);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.state-warning {
+  border-color: var(--warning-500);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+/* Efectos de hover específicos del tema */
+.theme-dark .hover-bg:hover {
+  background-color: rgba(51, 65, 85, 0.5);
+}
+
+.theme-dark .hover-border:hover {
+  border-color: var(--primary-500);
+}
+
+.theme-dark .hover-text:hover {
+  color: var(--primary-400);
+}
+
+/* Scrollbar personalizada para tema oscuro */
+.theme-dark ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.theme-dark ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.theme-dark ::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Selección de texto */
+.theme-dark ::selection {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: var(--text-primary);
+}
+
+.theme-dark ::-moz-selection {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: var(--text-primary);
+}
+
+/* Focus ring personalizado */
+.theme-dark .focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-primary);
+}
+
+.theme-dark .focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-primary);
+}
+
+/* Modo de alto contraste (accesibilidad) */
+@media (prefers-contrast: high) {
+  .theme-dark {
+    --text-primary: #ffffff;
+    --text-secondary: #e5e5e5;
+    --border-primary: #666666;
+    --border-secondary: #999999;
+  }
+}
+
+/* Modo de movimiento reducido (accesibilidad) */
+@media (prefers-reduced-motion: reduce) {
+  .theme-dark * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

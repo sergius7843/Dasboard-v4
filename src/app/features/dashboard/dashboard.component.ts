@@ -7,6 +7,7 @@ import { MemoryCardComponent } from './components/memory-card/memory-card.compon
 import {WiFiCardComponent} from './components/wifi-card/wifi-card.component';
 import {HeartbeatCardComponent} from './components/heartbeat-card/heartbeat-card.component';
 import {TemperatureCardComponent} from './components/temperature-card/temperature-card.component';
+import { LdrCardComponent } from './components/ldr-card/ldr-card.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,8 +20,9 @@ import {TemperatureCardComponent} from './components/temperature-card/temperatur
     MemoryCardComponent,
     WiFiCardComponent,
     HeartbeatCardComponent,
-    TemperatureCardComponent
-  ],
+    TemperatureCardComponent,
+    LdrCardComponent
+],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

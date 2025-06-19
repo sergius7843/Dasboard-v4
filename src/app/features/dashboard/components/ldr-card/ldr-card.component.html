@@ -1,0 +1,255 @@
+<!-- LDR Light Sensor Card -->
+<div class="ldr-card bg-dark-800 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 border border-dark-700 relative overflow-hidden w-[800px] mx-auto"
+     [class.offline]="!isConnected"
+     [class.stale]="!isDataFresh()">
+
+  <!-- Gradiente de fondo animado basado en el nivel de luz -->
+  <div class="absolute inset-0 rounded-xl opacity-10 pointer-events-none transition-all duration-500">
+    <div class="w-full h-full rounded-xl bg-gradient-to-br"
+         [class.from-yellow-400]="isDayTime()"
+         [class.to-orange-500]="isDayTime()"
+         [class.from-primary-600]="isNightTime()"
+         [class.to-primary-800]="isNightTime()"
+         [class.from-primary-500]="!isDayTime() && !isNightTime()"
+         [class.to-primary-700]="!isDayTime() && !isNightTime()">
+    </div>
+  </div>
+
+  <!-- Header de la card -->
+  <div class="relative p-6 pb-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <div class="relative">
+          <!-- Icono principal con animación -->
+          <div class="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300 bg-primary-500/20 border border-primary-500/30">
+            <svg class="w-6 h-6 transition-all duration-300 text-primary-400" 
+                 [class.animate-pulse]="isDayTime()"
+                 [class.text-yellow-400]="isDayTime()"
+                 [class.text-primary-400]="!isDayTime()"
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getLightIcon()"></path>
+            </svg>
+          </div>
+          
+          <!-- Indicador de nivel de luz -->
+          <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-dark-800 transition-colors duration-300"
+               [class.bg-yellow-400]="isDayTime()"
+               [class.bg-primary-500]="isNightTime()"
+               [class.bg-primary-400]="!isDayTime() && !isNightTime()"
+               [class.animate-pulse]="isDayTime()">
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-white">Sensor de Luz</h3>
+          <p class="text-sm text-dark-400">ESP32 • LDR Fotoresistor</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <!-- Estado de conexión -->
+        <div class="w-3 h-3 rounded-full transition-colors duration-300"
+             [class.bg-success-500]="isConnected && isDataFresh()"
+             [class.bg-warning-500]="isConnected && !isDataFresh()"
+             [class.bg-danger-500]="!isConnected"
+             [class.animate-pulse]="!isConnected || !isDataFresh()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="relative px-6 pb-6" *ngIf="ldrData && hasHistoricalData(); else noDataTemplate">
+
+    <!-- Lectura principal -->
+    <div class="mb-6">
+      <div class="text-center p-6 rounded-xl transition-all duration-300 bg-dark-700/50 border border-dark-600">
+        
+        <!-- Valor principal -->
+        <div class="mb-4">
+          <span class="text-4xl font-bold text-white">
+            {{ formatLdrValue(ldrStats.current) }}
+          </span>
+          <span class="text-lg text-dark-400 ml-2">ADC</span>
+        </div>
+
+        <!-- Porcentaje de luz con barra visual -->
+        <div class="mb-4">
+          <div class="w-full bg-dark-600 rounded-full h-3 overflow-hidden mb-2">
+            <div class="h-full transition-all duration-700 rounded-full relative"
+                 [class.bg-gradient-to-r]="true"
+                 [class.from-yellow-400]="isDayTime()"
+                 [class.to-yellow-500]="isDayTime()"
+                 [class.from-primary-400]="isNightTime()"
+                 [class.to-primary-600]="isNightTime()"
+                 [class.from-primary-400]="!isDayTime() && !isNightTime()"
+                 [class.to-primary-500]="!isDayTime() && !isNightTime()"
+                 [style.width.%]="ldrStats.lightPercentage">
+              <!-- Efecto de brillo en la barra -->
+              <div class="absolute inset-0 bg-white opacity-20 animate-pulse" *ngIf="isDayTime()"></div>
+            </div>
+          </div>
+          <div class="text-sm text-dark-300">
+            <span class="font-semibold text-white">{{ getFormattedPercentage() }}</span> intensidad lumínica
+          </div>
+        </div>
+
+        <!-- Estado de luz -->
+        <div class="flex items-center justify-center space-x-3">
+          <span class="text-xl font-semibold"
+                [class.text-yellow-400]="isDayTime()"
+                [class.text-primary-400]="isNightTime()"
+                [class.text-primary-300]="!isDayTime() && !isNightTime()">
+            {{ getLightStatus() }}
+          </span>
+          <div class="flex items-center text-sm"
+               [class]="getChangeColor()">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getChangeIcon()"></path>
+            </svg>
+            <span>{{ getChangeDescription() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      
+      <!-- Mínimo (más luz) -->
+      <div class="bg-dark-700/50 border border-dark-600 rounded-lg p-4 transition-all duration-300 hover:bg-dark-700">
+        <div class="flex items-center space-x-2 mb-2">
+          <div class="w-6 h-6 rounded-full bg-success-500/20 border border-success-500/30 flex items-center justify-center">
+            <svg class="w-3 h-3 text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-dark-400 uppercase tracking-wide">Más Luz</span>
+        </div>
+        <div class="text-xl font-bold text-white">{{ formatLdrValue(ldrStats.min) }}</div>
+        <div class="text-xs text-success-400 mt-1">Valor ADC mínimo</div>
+      </div>
+
+      <!-- Máximo (menos luz) -->
+      <div class="bg-dark-700/50 border border-dark-600 rounded-lg p-4 transition-all duration-300 hover:bg-dark-700">
+        <div class="flex items-center space-x-2 mb-2">
+          <div class="w-6 h-6 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center">
+            <svg class="w-3 h-3 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-dark-400 uppercase tracking-wide">Menos Luz</span>
+        </div>
+        <div class="text-xl font-bold text-white">{{ formatLdrValue(ldrStats.max) }}</div>
+        <div class="text-xs text-primary-400 mt-1">Valor ADC máximo</div>
+      </div>
+
+      <!-- Promedio -->
+      <div class="bg-dark-700/50 border border-dark-600 rounded-lg p-4 transition-all duration-300 hover:bg-dark-700">
+        <div class="flex items-center space-x-2 mb-2">
+          <div class="w-6 h-6 rounded-full bg-warning-500/20 border border-warning-500/30 flex items-center justify-center">
+            <svg class="w-3 h-3 text-warning-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-dark-400 uppercase tracking-wide">Promedio</span>
+        </div>
+        <div class="text-xl font-bold text-white">{{ formatLdrValue(ldrStats.average) }}</div>
+        <div class="text-xs text-warning-400 mt-1">Media histórica</div>
+      </div>
+
+      <!-- Rango -->
+      <div class="bg-dark-700/50 border border-dark-600 rounded-lg p-4 transition-all duration-300 hover:bg-dark-700">
+        <div class="flex items-center space-x-2 mb-2">
+          <div class="w-6 h-6 rounded-full bg-danger-500/20 border border-danger-500/30 flex items-center justify-center">
+            <svg class="w-3 h-3 text-danger-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-dark-400 uppercase tracking-wide">Rango</span>
+        </div>
+        <div class="text-xl font-bold text-white">{{ formatLdrValue(getLdrRange()) }}</div>
+        <div class="text-xs text-danger-400 mt-1">Variación total</div>
+      </div>
+
+    </div>
+
+    <!-- Información técnica -->
+    <div class="bg-dark-700/30 border border-dark-600 rounded-lg p-4 transition-colors duration-300">
+      <div class="flex items-center space-x-2 mb-3">
+        <svg class="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="text-sm font-medium text-white">Información del Sensor</span>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        
+        <!-- Última variación -->
+        <div class="flex items-center justify-between" *ngIf="ldrStats.lastChange !== 0">
+          <span class="text-dark-400">Variación:</span>
+          <span class="font-medium"
+                [class]="getChangeColor()">
+            {{ ldrStats.lastChange > 0 ? '+' : '' }}{{ formatLdrValue(ldrStats.lastChange) }}
+          </span>
+        </div>
+
+        <!-- Uptime -->
+        <div class="flex items-center justify-between">
+          <span class="text-dark-400">Uptime:</span>
+          <span class="font-medium text-white">{{ getSensorUptime() }}</span>
+        </div>
+
+        <!-- Resolución -->
+        <div class="flex items-center justify-between">
+          <span class="text-dark-400">Resolución:</span>
+          <span class="font-medium text-white">12-bit ADC</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Template cuando no hay datos -->
+  <ng-template #noDataTemplate>
+    <div class="relative px-6 pb-6">
+      <div class="text-center py-8">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-dark-700 border border-dark-600 flex items-center justify-center">
+          <svg class="w-8 h-8 text-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+        </div>
+        <h4 class="text-lg font-medium text-white mb-2">Sin datos del sensor</h4>
+        <p class="text-sm text-dark-400" *ngIf="!isConnected">
+          Conecta al broker MQTT para ver los datos del LDR
+        </p>
+        <p class="text-sm text-dark-400" *ngIf="isConnected">
+          Esperando lecturas del sensor de luz...
+        </p>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Footer con timestamp -->
+  <div class="relative px-6 py-3 border-t border-dark-700 bg-dark-700/30 rounded-b-xl" 
+       *ngIf="lastUpdate">
+    <div class="flex items-center justify-between text-xs">
+      <span class="text-dark-400">
+        Última lectura: {{ lastUpdate | date:'HH:mm:ss' }}
+      </span>
+      <div class="flex items-center space-x-2">
+        <div class="w-2 h-2 rounded-full transition-colors duration-300"
+             [class.bg-success-500]="isDataFresh()"
+             [class.bg-warning-500]="!isDataFresh()">
+        </div>
+        <span class="font-medium"
+              [class.text-success-400]="isDataFresh()"
+              [class.text-warning-400]="!isDataFresh()">
+          {{ isDataFresh() ? 'En línea' : 'Desactualizado' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>
